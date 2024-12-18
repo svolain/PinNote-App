@@ -1,10 +1,10 @@
 import React from "react";
-import StyleIcon from '@mui/icons-material/Style';
+import PushPinIcon from '@mui/icons-material/PushPin';
 
 function Header() {
   return (
     <header>
-      <h1><StyleIcon />Keep</h1>
+      <h1><PushPinIcon />PinNote</h1>
     </header>
   );
 }

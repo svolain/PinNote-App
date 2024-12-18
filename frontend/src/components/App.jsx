@@ -7,50 +7,39 @@ import Login from "./auth/Login";
 import Register from "./auth/Register";
 
 function App() {
-  const [user, setUser] = useState(null);
   const [notes, setNotes] = useState([]);
+  const [user, setUser] = useState(null);
+  const [users, setUsers] = useState([]); // use database insted of this when backend is ready
   const [isLogin, setIsLogin] = useState(true);
 
   function handleLogin(credentials) {
-    console.log("Logging in with:", credentials.username);
-    setUser({ username: credentials.username, 
-              password: credentials.password });
+    //once connected to backend needs to check if the credentials are valid from database
+    console.log("Logged in with:", credentials.username);
+    setUser({ username: credentials.username,
+              password: credentials.password,
+     });
   }
 
-  function handleRegister(data) {
-    console.log("Registering with:", data.username);
-    alert("Registration successful! Please log in.");
-  }
-
-  function handleLogout() {
-    setUser(null);
-    setNotes([]);
+  function handleRegister(credentials) {
+    console.log("Registered with:", credentials);
+    //instead of adding to array, add to database when backend is connected
+    setUsers({ credentials });
   }
 
   function addNote(newNote) {
-    setNotes(prevNotes => [...prevNotes, newNote]);
+    setNotes(prevNotes => {
+      //add note to database later
+      return [...prevNotes, newNote];
+    });
   }
 
   function deleteNote(id) {
-    setNotes(prevNotes => prevNotes.filter((noteItem, index) => index !== id));
-  }
-
-  function NotesDashboard() {
-    return (
-      <div>
-        <button onClick={handleLogout}>Logout</button>
-        <CreateNote onAdd={addNote} />
-        {notes.map((note, index) => (
-          <Note
-            key={index}
-            id={index}
-            title={note.title}
-            content={note.content}
-            onDelete={deleteNote}
-          />
-        ))}
-      </div>
-    );
+    setNotes(prevNotes => {
+      //delete from database later
+      return prevNotes.filter((noteItem, index) => {
+        return index !== id;
+      });
+    });
   }
 
   function toggleForm() {
@@ -59,25 +48,36 @@ function App() {
 
   return (
     <div>
-      <h1>Welcome to My Notes App</h1>
+      <Header />
       {!user ? (
-        <div>
+        <div className="auth-form-container">
           {isLogin ? (
             <Login onLogin={handleLogin} />
           ) : (
             <Register onRegister={handleRegister} />
           )}
-
-          <button onClick={toggleForm}>
-            {isLogin ? "Need an account? Register" : "Already have an account? Log in"}
+          <button className="toggle-button" onClick={toggleForm}>
+            {isLogin ? "Register Account" : "Already have an account?"}
           </button>
         </div>
       ) : (
         <div>
-          <h2>Welcome, {user.username}!</h2>
-          <NotesDashboard />
+          <div className="welcome-container">
+            <h2>Welcome, {user.username}!</h2>
+          </div>
+          <CreateNote onAdd={addNote}/>
+          {notes.map((note, index) => (
+          <Note
+            key={index}
+            id={index}
+            title={note.title}
+            content={note.content}
+            onDelete={deleteNote}
+          />
+        ))}
         </div>
       )}
+      <Footer />
     </div>
   );
 }

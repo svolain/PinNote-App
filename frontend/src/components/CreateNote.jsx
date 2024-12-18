@@ -1,48 +1,66 @@
 import React, { useState } from "react";
+import AddIcon from '@mui/icons-material/Add';
+import Fab from '@mui/material/Fab';
+import Zoom from '@mui/material/Zoom';
 
-function Login({ onLogin }) {
-  const [credentials, setCredentials] = useState({
-    username: "",
-    password: "",
+function CreateNote(props) {
+  const [isExpanded, setExpanded] = useState(false);
+
+  const [note, setNote] = useState({
+    title: "",
+    content: ""
   });
 
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setCredentials((prevCredentials) => ({
-      ...prevCredentials,
-      [name]: value,
-    }));
+  function handleChange(event) {
+    const { name, value } = event.target;
+
+    setNote(prevNote => {
+      return {
+        ...prevNote,
+        [name]: value
+      };
+    });
   }
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    onLogin(credentials);
+  function submitNote(event) {
+    props.onAdd(note);
+    setNote({
+      title: "",
+      content: ""
+    });
+    event.preventDefault();
+  }
+
+  function expand() {
+    setExpanded(true);
   }
 
   return (
     <div>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          value={credentials.username}
+      <form className="create-note">
+        {isExpanded ? <input
+          name="title"
           onChange={handleChange}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={credentials.password}
+          value={note.title}
+          placeholder="Title"
+        /> : null}
+
+        <textarea
+          name="content"
+          onClick={expand}
           onChange={handleChange}
-          required
+          value={note.content}
+          placeholder="Take a note..."
+          rows={isExpanded ? "3" : "1"}
         />
-        <button type="submit">Login</button>
+        <Zoom in={isExpanded ? true : false}>
+          <Fab onClick={submitNote}>
+            <AddIcon />
+          </Fab>
+        </Zoom>
       </form>
     </div>
   );
 }
 
-export default Login;
+export default CreateNote;
