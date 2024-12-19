@@ -1,29 +1,53 @@
+// routes/noteRoutes.js
 const express = require("express");
-const pool = require("../db/pool");
+const jwt = require("jsonwebtoken");
+const noteModel = require("../models/noteModel");
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-  const userId = req.user.userId;
-  const result = await pool.query("SELECT * FROM notes WHERE userId = $1", [userId]);
-  res.json(result.rows);
+const authenticate = (req, res, next) => {
+  const token = req.headers.authorization?.split(" ")[1];
+
+  if (!token) return res.status(403).json({ error: "No token provided" });
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) return res.status(401).json({ error: "Invalid token" });
+    req.user = decoded;
+    next();
+  });
+};
+
+router.get("/", authenticate, async (req, res) => {
+  try {
+    const notes = await noteModel.getNotesByUserId(req.user.userId);
+    res.json(notes);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to retrieve notes" });
+  }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", authenticate, async (req, res) => {
   const { title, content } = req.body;
-  const userId = req.user.userId;
-  const result = await pool.query(
-    "INSERT INTO notes (title, content, userId) VALUES ($1, $2, $3) RETURNING *",
-    [title, content, userId]
-  );
-  res.status(201).json(result.rows[0]);
+  try {
+    const note = await noteModel.createNote(title, content, req.user.userId);
+    res.status(201).json(note);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to create note" });
+  }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", authenticate, async (req, res) => {
   const { id } = req.params;
-  const userId = req.user.userId;
-  await pool.query("DELETE FROM notes WHERE id = $1 AND userId = $2", [id, userId]);
-  res.status(204).send();
+  try {
+    const deletedNote = await noteModel.deleteNote(id, req.user.userId);
+    if (deletedNote) {
+      res.status(204).send();
+    } else {
+      res.status(404).json({ error: "Note not found or not authorized" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: "Failed to delete note" });
+  }
 });
 
 module.exports = router;
