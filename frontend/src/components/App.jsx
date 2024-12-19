@@ -26,6 +26,11 @@ function App() {
     setUsers({ credentials });
   }
 
+  function handleLogout() {
+    setUser(null);
+    setNotes([]);
+  }
+
   function addNote(newNote) {
     setNotes(prevNotes => {
       //add note to database later
@@ -64,6 +69,9 @@ function App() {
         <div>
           <div className="welcome-container">
             <h2>Welcome, {user.username}!</h2>
+            <button className="logout-button" onClick={handleLogout}>
+              Logout
+            </button>
           </div>
           <CreateNote onAdd={addNote}/>
           {notes.map((note, index) => (

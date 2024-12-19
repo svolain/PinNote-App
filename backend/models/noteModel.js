@@ -1,0 +1,6 @@
+/*CREATE TABLE notes (
+  id SERIAL PRIMARY KEY,
+  title TEXT NOT NULL,
+  content TEXT NOT NULL,
+  userId INT NOT NULL REFERENCES users(id) ON DELETE CASCADE
+);*/

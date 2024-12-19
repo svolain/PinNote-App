@@ -186,7 +186,34 @@ form.create-note button {
   text-align: center;
 }
 
-.welcome-container h2 {
-  font-size: 1.8em;
+.welcome-container {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.logout-button {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #f5ba13;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.logout-button:hover {
+  background-color: #e0a106;
+}
+
+.welcome-text {
+  display: inline-block;
+  margin: 0;
+  font-size: 1.5rem;
   color: #333;
 }
