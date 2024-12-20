@@ -19,6 +19,7 @@ PinNote is a note-taking application that allows users to create and manage note
 ## Authentication
 
 Login: Users can log in with their credentials to access their saved notes.
+
 Registration: New users can create an account to start using the app and saving notes.
 Delete Account: Users have possibility to delete their account after login.
 
@@ -51,7 +52,7 @@ DB_USER=example // your postgres username
 DB_PASS=example // your postgres password
 DB_NAME=example // name of the to be created database
 DB_HOST=example // if running postgres locally use localhost
-DB_PORT=example //usually the default port for postgres
+DB_PORT=example // usually the default port for postgres
 JWT_SECRET=example //for signing and verifying JSON Web Tokens, recommended to include letters, numbers and special characters, and to be at least 20 characters long
 ```
 
@@ -67,14 +68,14 @@ The frontend is structured in React components that manage user input, handle AP
 
 #### App.jsx
 
-The core of the application, App.jsx is the parent component that handles the user authentication flow, manages notes, and renders different views based on the user's state. It uses child components such as CreateNote, Footer, Header, Note, Login and register, which all are stored in their own jsx files.
+The core of the application, App.jsx is the parent component that handles the user authentication flow, manages notes, and renders different views based on the user's state. It uses child components such as CreateNote, Footer, Header, Note, Login and Register, which all are stored in their own jsx files.
 
-User State Management:
+##### User State Management:
 
-Tracks if a user is logged in or not (user state).
-Manages notes for the authenticated user (notes state).
+- Tracks if a user is logged in or not
+- Manages notes for the authenticated user
 
-useEffect Hook:
+##### useEffect Hook:
 
 On initial load, the useEffect hook fetches the stored token and user information from localStorage. If valid, it fetches the user’s notes from the backend.
 This is triggered only once when the component mounts, making it an ideal place for authentication and fetching user-specific data.
@@ -85,32 +86,37 @@ If the user is logged in, it shows the notes and allows the user to add new note
 
 ### Backend
 
-The backend is built with Node.js and Express.js, providing a scalable environment for handling HTTP requests and managing user authentication. The authentication system uses JWT (JSON Web Tokens) to secure user sessions, and bcrypt is employed for securely hashing passwords before storing them in the database.
+The backend is built with Node.js and Express.js, providing a scalable environment for handling HTTP requests and managing user authentication. The authentication system uses JWT to secure user sessions, and bcrypt is employed for securely hashing passwords before storing them in the database.
 
 #### API Endpoints
 
 The backend exposes several routes for interacting with the user and notes data.
 
-User Routes (userRoutes.js)
+##### userRoutes.js
+
 POST /api/users/register: Registers a new user. Hashes the user's password and stores it in the database.
+
 POST /api/users/login: Logs a user in by verifying their credentials and issuing a JWT token.
 
-Note Routes (noteRoutes.js)
+##### noteRoutes.js
+
 GET /api/notes: Fetches all notes for the authenticated user.
+
 POST /api/notes: Creates a new note for the authenticated user.
+
 DELETE /api/notes/:id: Deletes a note for the authenticated user.
 
 #### How It Works Together
 
-User Registration: A new user submits a registration request, their password is hashed using bcrypt, and the user is stored in the PostgreSQL database.
+**User Registration**: A new user submits a registration request, their password is hashed using bcrypt, and the user is stored in the PostgreSQL database.
 
-User Login: The user logs in, their credentials are verified, and if valid, a JWT token is generated.
+**User Login**: The user logs in, their credentials are verified, and if valid, a JWT token is generated.
 
-Note Management: The user can create, view, and delete notes. Each note is associated with the user's userId in the database.
+**Note Management**: The user can create, view, and delete notes. Each note is associated with the user's userId in the database.
 
 ### Database
 
-All user data (username, password) and notes (title, content) are stored in a PostgreSQL database, providing secure and persistent storage across sessions.
+All user data and notes are stored in a PostgreSQL database, providing secure and persistent storage across sessions.
 
 Passwords are hashed and salted using the bcrypt library before being stored in the PostgreSQL database, ensuring secure password storage. The bcrypt.hash() function is used to generate a hashed password with a salt factor of 10.
 
