@@ -13,7 +13,7 @@ export const loginUser = async (userData) => {
 };
 
 export const fetchNotes = async (token) => {
-  const response = await axios.get(`${API_BASE_URL}/notes`, {
+  const response = await axios.get(`${API_BASE_URL}/notes/`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return response.data;

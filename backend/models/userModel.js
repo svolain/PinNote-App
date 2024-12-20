@@ -23,4 +23,12 @@ const validatePassword = async (password, hashedPassword) => {
   return await bcrypt.compare(password, hashedPassword);
 };
 
-module.exports = { registerUser, findUserByUsername, validatePassword };
+const deleteUserById = async (userId) => {
+  const result = await pool.query("DELETE FROM users WHERE id = $1 RETURNING id", [userId]);
+  if (result.rowCount === 0) {
+    throw new Error("User not found");
+  }
+  return result.rows[0];
+};
+
+module.exports = { registerUser, findUserByUsername, validatePassword, deleteUserById };

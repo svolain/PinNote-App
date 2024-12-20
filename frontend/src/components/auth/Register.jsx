@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import { registerUser } from "../../api";
 
 function Register({ onRegister }) {
     const [credentials, setCredentials] = useState({
@@ -6,23 +7,27 @@ function Register({ onRegister }) {
       password: "",
       confirmPassword: "",
     });
+
+    const [error, setError] = useState("");
   
     function handleChange(event) {
       const { name, value } = event.target;
       setCredentials((prev) => ({ ...prev, [name]: value }));
     }
   
-    function handleSubmit(event) {
-      if (credentials.password !== credentials.confirmPassword) {
-        alert("Passwords do not match!");
-        return;
-      }
-      onRegister(credentials);
+    const handleSubmit = async (event) => {
       event.preventDefault();
+      try {
+        await registerUser(credentials);
+        onRegister();
+      } catch (err) {
+        setError("Username already exists");
+      }
     }
   
     return (
         <form className="auth-form" onSubmit={handleSubmit}>
+          {error && <p style={{ color: "red" }}>{error}</p>}
           <input
             type="text"
             name="username"

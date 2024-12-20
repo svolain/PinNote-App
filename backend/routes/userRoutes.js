@@ -21,11 +21,43 @@ router.post("/login", async (req, res) => {
     const user = await userModel.findUserByUsername(username);
     if (user && await userModel.validatePassword(password, user.password)) {
       const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-      res.json({ token });
+      res.json({ token, userId: user.id });
     } else {
       res.status(401).json({ error: "Invalid credentials" });
     }
   } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+const authenticateUser = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const token = authHeader.split(" ")[1];
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (err) {
+    res.status(401).json({ error: "Invalid token" });
+  }
+};
+
+router.delete("/:id", authenticateUser, async (req, res) => {
+  const userId = parseInt(req.params.id, 10);
+
+  if (req.user.userId !== userId) {
+    return res.status(403).json({ error: "Not authorized to delete this account" });
+  }
+
+  try {
+    await userModel.deleteUserById(userId);
+    res.status(200).json({ message: "Account deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting account:", err);
     res.status(500).json({ error: "Internal server error" });
   }
 });

@@ -3,7 +3,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab';
 import Zoom from '@mui/material/Zoom';
 
-function CreateNote(props) {
+function CreateNote({ onAdd, token }) {
   const [isExpanded, setExpanded] = useState(false);
 
   const [note, setNote] = useState({
@@ -22,13 +22,29 @@ function CreateNote(props) {
     });
   }
 
-  function submitNote(event) {
-    props.onAdd(note);
-    setNote({
-      title: "",
-      content: ""
-    });
+  async function submitNote(event) {
     event.preventDefault();
+
+    try {
+      const response = await fetch("/api/notes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(note),
+      });
+
+      if (response.ok) {
+        const createdNote = await response.json();
+        onAdd(createdNote);
+        setNote({ title: "", content: "" });
+      } else {
+        console.error("Failed to create note");
+      }
+    } catch (error) {
+      console.error("Error creating note:", error);
+    }
   }
 
   function expand() {

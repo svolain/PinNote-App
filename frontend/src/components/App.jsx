@@ -1,46 +1,102 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import Header from "./Header";
 import Footer from "./Footer";
 import Note from "./Note";
 import CreateNote from "./CreateNote";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
+import { fetchNotes } from "../api";
 
 function App() {
   const [notes, setNotes] = useState([]);
   const [user, setUser] = useState(null);
-  const [users, setUsers] = useState([]); // use database insted of this when backend is ready
   const [isLogin, setIsLogin] = useState(true);
 
-  function handleLogin(credentials) {
-    //once connected to backend needs to check if the credentials are valid from database
-    console.log("Logged in with:", credentials.username);
-    setUser({ username: credentials.username,
-              password: credentials.password,
-     });
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+  
+    if (token && storedUser) {
+      setUser(storedUser);
+  
+      fetchNotes(token)
+        .then((fetchedNotes) => {
+          setNotes(fetchedNotes);
+        })
+        .catch(() => {
+          localStorage.removeItem("token")
+          localStorage.removeItem("user");
+          setUser(null);
+          setNotes([]);
+        });
+    } else {
+      setUser(null);
+      setNotes([]);
+    }
+  }, []);
+  
+
+  function handleLogin(credentials, data) {
+    setUser(credentials);
+    fetchNotes(data.token)
+        .then(setNotes)
+        .catch((error) => console.error("Error fetching notes after login:", error));
   }
 
   function handleRegister(credentials) {
-    console.log("Registered with:", credentials);
-    //instead of adding to array, add to database when backend is connected
-    setUsers({ credentials });
+    alert("Registration Successful");
+    setIsLogin(true);
   }
 
   function handleLogout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setUser(null);
     setNotes([]);
   }
 
+  function handleDeleteAccount() {
+    const confirmDelete = window.confirm("Are you sure you want to delete your account?");
+    if (!confirmDelete) 
+      return;
+    const token = localStorage.getItem("token");
+    const user = JSON.parse(localStorage.getItem("user"));
+    
+    if (!user || !user.id) {
+      console.error("User ID is missing.");
+      alert("User not found. Please log in again.");
+      return;
+    }
+  
+    const userId = user.id;
+    fetch(`/api/users/${userId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to delete account");
+        }
+        alert("Your account has been deleted.");
+        localStorage.clear();
+        window.location.href = "/login";
+      })
+      .catch((error) => {
+        console.error("Error deleting account:", error);
+        alert("Failed to delete account. Please try again.");
+      });
+  }
+  
   function addNote(newNote) {
     setNotes(prevNotes => {
-      //add note to database later
       return [...prevNotes, newNote];
     });
   }
 
   function deleteNote(id) {
     setNotes(prevNotes => {
-      //delete from database later
       return prevNotes.filter((noteItem, index) => {
         return index !== id;
       });
@@ -53,7 +109,10 @@ function App() {
 
   return (
     <div>
-      <Header />
+      <Header 
+        user={user} 
+        handleLogout={handleLogout} 
+        handleDeleteAccount={handleDeleteAccount} />
       {!user ? (
         <div className="auth-form-container">
           {isLogin ? (
@@ -67,19 +126,17 @@ function App() {
         </div>
       ) : (
         <div>
-          <div className="welcome-container">
-            <h2>Welcome, {user.username}!</h2>
-            <button className="logout-button" onClick={handleLogout}>
-              Logout
-            </button>
-          </div>
-          <CreateNote onAdd={addNote}/>
+          <CreateNote 
+            onAdd={addNote}
+            token={localStorage.getItem("token")}/>
           {notes.map((note, index) => (
           <Note
-            key={index}
-            id={index}
+            key={note.id}
+            id={note.id}
+            localid={index}
             title={note.title}
             content={note.content}
+            token={localStorage.getItem("token")}
             onDelete={deleteNote}
           />
         ))}
