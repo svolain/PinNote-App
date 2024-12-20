@@ -14,7 +14,7 @@ PinNote is a note-taking application that allows users to create and manage note
 
 ![register form](/public/register.jpg)
 
-![User page](/public/notes.png)
+![User page](/public/notes.jpg)
 
 ## Authentication
 
