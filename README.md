@@ -59,6 +59,12 @@ JWT_SECRET=example //for signing and verifying JSON Web Tokens, recommended to i
 
 Make sure you have postgres installed and running. You have to sign into postgres and create a database with the same name as .env DB_NAME, and create 2 tables into it according to schemas listed below in database section of Tech details.
 
+Run server.js and navigate to localhost:5000 in your browser
+
+```
+node server.js
+```
+
 ## Tech Details
 
 The Frontend is made with React with custom API to connect it with backend server and database. Backend is powered by node and express.js, whith integrated Postgres Database.
