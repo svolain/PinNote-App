@@ -18,9 +18,9 @@ PinNote is a note-taking application that allows users to create and manage note
 
 ## Authentication
 
-Login: Users can log in with their credentials to access their saved notes.
+**Login**: Users can log in with their credentials to access their saved notes.
 
-Registration: New users can create an account to start using the app and saving notes.
+**Registration**: New users can create an account to start using the app and saving notes.
 Delete Account: Users have possibility to delete their account after login.
 
 ## Install & Run Locally
