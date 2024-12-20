@@ -45,7 +45,7 @@ Navigate to backend directory
 cd ../backend/
 ```
 
-Note that all the crusial credentials and keys are held in .env which is not pushed into this repository.
+Note that all the crucial credentials and keys are held in .env which is not pushed into this repository.
 Before running the code make an .env file in the root of backend directory. Here is an example of the file with variable names:
 
 ```
