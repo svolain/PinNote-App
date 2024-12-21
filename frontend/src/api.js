@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "https://pinnote-app-production.up.railway.app/";
+const API_BASE_URL = "https://pinnote-app-production.up.railway.app/api";
 
 export const registerUser = async (userData) => {
   const response = await axios.post(`${API_BASE_URL}/users/register`, userData);
