@@ -49,12 +49,12 @@ Note that all the crucial credentials and keys are held in .env which is not pus
 Before running the code make an .env file in the root of backend directory. Here is an example of the file with variable names:
 
 ```
-DB_USER=example // your postgres username
-DB_PASS=example // your postgres password
-DB_NAME=example // name of the to be created database
-DB_HOST=example // if running postgres locally use localhost
-DB_PORT=example // usually the default port for postgres
-JWT_SECRET=example //for signing and verifying JSON Web Tokens, recommended to include letters, numbers and special characters, and to be at least 20 characters long
+DB_USER: example // your postgres username
+DB_PASS: example // your postgres password
+DB_NAME: example // name of the to be created database
+DB_HOST: example // if running postgres locally use localhost
+DB_PORT: example // usually the default port for postgres
+JWT_SECRET: example //for signing and verifying JSON Web Tokens, recommended to include letters, numbers and special characters, and to be at least 20 characters long
 ```
 
 Make sure you have postgres installed and running. You have to sign into postgres and create a database with the same name as .env DB_NAME, and create 2 tables into it according to schemas listed below in database section of Tech details.
@@ -136,18 +136,18 @@ SQL Schemas for the Users and Notes Tables
 ```
 -- Users table
 CREATE TABLE users (
-  id SERIAL PRIMARY KEY,                -- Unique user identifier, automatically incremented
-  username VARCHAR(255) UNIQUE NOT NULL, -- Username must be unique and cannot be null
-  password TEXT NOT NULL                -- Password is stored as a text field and cannot be null
+  id SERIAL PRIMARY KEY,                // Unique user identifier, automatically incremented
+  username VARCHAR(255) UNIQUE NOT NULL, // Username must be unique and cannot be null
+  password TEXT NOT NULL                // Password is stored as a text field and cannot be null
 );
 
 -- Notes table
 CREATE TABLE notes (
-  id SERIAL PRIMARY KEY,                -- Unique note identifier, automatically incremented
-  title TEXT NOT NULL,                  -- Title of the note, cannot be null
-  content TEXT NOT NULL,                -- Content of the note, cannot be null
-  userId INT NOT NULL,                  -- Foreign key to link the note to a user
-  CONSTRAINT fk_user                    -- Foreign key constraint to ensure userId exists in the users table
-    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE  -- Cascades the deletion of notes if the user is deleted
+  id SERIAL PRIMARY KEY,                // Unique note identifier, automatically incremented
+  title TEXT NOT NULL,                  // Title of the note, cannot be null
+  content TEXT NOT NULL,                // Content of the note, cannot be null
+  userId INT NOT NULL,                  // Foreign key to link the note to a user
+  CONSTRAINT fk_user                    // Foreign key constraint to ensure userId exists in the users table
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE  // Cascades the deletion of notes if the user is deleted
 );
 ```
