@@ -2,6 +2,10 @@
 
 PinNote is a note-taking application that allows users to create and manage notes on their own user accounts. It is powered by **React, Node.js, Express.js and PostgreSQL**. The app provides a simple and clear user interface to add, view, and delete notes. It is inspired by Google Keep but offers a more simplified and smoother UI with only the essential note taking features.
 
+## Accessing The App
+
+The App is hosted in railway.app and can be accessed through this link: https://pinnote-app-production.up.railway.app/login.
+
 ## Key Features
 
 - **Add Notes**: Easily create notes with titles and content that are saved automatically.
