@@ -20,14 +20,6 @@ The App is hosted in railway.app and can be accessed through this link: https://
 
 ![User page](/public/notes.jpg)
 
-## Authentication
-
-**Login**: Users can log in with their credentials to access their saved notes.
-
-**Registration**: New users can create an account to start using the app and saving notes.
-
-**Delete Account**: Users have possibility to delete their account after login.
-
 ## Install & Run Locally
 
 Clone the repository
