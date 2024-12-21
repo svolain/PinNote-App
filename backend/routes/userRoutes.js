@@ -7,20 +7,17 @@ const router = express.Router();
 
 router.post("/register", async (req, res) => {
 
-  console.log("Received registration data:", req.body);
-
-  const { username, password } = req.body;
+  const { username, password, confirmPassword } = req.body;
 
   if (!username || !password) {
     console.error("Error: Missing username or password");
     return res.status(400).json({ error: "Username and password are required" });
+  }
+
+  if (password !== confirmPassword) {
+    return res.status(400).json({ error: "Passwords do not match" });
   }
   
-  if (!username || !password) {
-    console.error("Error: Missing username or password");
-    return res.status(400).json({ error: "Username and password are required" });
-  }
-
   try {
     const user = await userModel.registerUser(username, password);
     res.status(201).json({ userId: user.id });

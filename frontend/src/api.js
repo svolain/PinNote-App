@@ -4,10 +4,9 @@ const API_BASE_URL = "https://pinnote-app-production.up.railway.app/api";
 // const API_BASE_URL = "http://localhost:3000/api";
 
 export const registerUser = async (userData) => {
-  const { confirmPassword, ...rest } = userData;
   const response = await axios.post(
     `${API_BASE_URL}/users/register`,
-    rest,
+    userData,
     {
       headers: {
         'Content-Type': 'application/json',
