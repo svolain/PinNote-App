@@ -11,7 +11,6 @@ const pool = new Pool({
     
     //for deployment
     connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false },
     
   });
   
