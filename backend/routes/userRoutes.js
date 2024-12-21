@@ -6,7 +6,21 @@ require("dotenv").config();
 const router = express.Router();
 
 router.post("/register", async (req, res) => {
+
+  console.log("Received registration data:", req.body);
+
   const { username, password } = req.body;
+
+  if (!username || !password) {
+    console.error("Error: Missing username or password");
+    return res.status(400).json({ error: "Username and password are required" });
+  }
+  
+  if (!username || !password) {
+    console.error("Error: Missing username or password");
+    return res.status(400).json({ error: "Username and password are required" });
+  }
+
   try {
     const user = await userModel.registerUser(username, password);
     res.status(201).json({ userId: user.id });

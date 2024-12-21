@@ -10,6 +10,7 @@ const registerUser = async (username, password) => {
     );
     return result.rows[0];
   } catch (err) {
+    console.error("Database error during user registration:", err.message);
     throw new Error("Username already exists");
   }
 };
