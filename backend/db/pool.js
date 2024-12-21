@@ -13,6 +13,9 @@ const pool = new Pool({
 
     //for deployment
     connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false, // This is required for many cloud-hosted Postgres instances.
+    }
   });
   
   module.exports = pool;
