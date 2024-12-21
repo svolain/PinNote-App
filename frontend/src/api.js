@@ -1,15 +1,31 @@
 import axios from "axios";
 
 const API_BASE_URL = "https://pinnote-app-production.up.railway.app/api";
-//const API_BASE_URL = "http://localhost:3000/api";
+// const API_BASE_URL = "http://localhost:3000/api";
 
 export const registerUser = async (userData) => {
-  const response = await axios.post(`${API_BASE_URL}/users/register`, userData);
+  const response = await axios.post(
+    `${API_BASE_URL}/users/register`,
+    userData,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }
+  );
   return response.data;
 };
 
 export const loginUser = async (userData) => {
-  const response = await axios.post(`${API_BASE_URL}/users/login`, userData);
+  const response = await axios.post(
+    `${API_BASE_URL}/users/login`,
+    userData,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }
+  );
   return response.data;
 };
 
