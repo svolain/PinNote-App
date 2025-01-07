@@ -10,8 +10,7 @@ The App is hosted in railway.app and can be accessed through this link: https://
 
 - **Add Notes**: Easily create notes with titles and content that are saved automatically.
 - **Delete Notes**: Remove notes when they are no longer needed.
-- **User Authentication**: Log in to your account to securely store and access your personal notes.
-- **Registration, Login & Delete Account**: New users can sign up, existing users can log in to view their notes and have possibility to delete their account.
+- **User Authentication**: New users can sign up, existing users can log in to view their notes and have possibility to delete their account.
 - **Database Integration**: User information and notes are securely stored in a PostgreSQL database.
 
 ![login page](/public/login.jpg)
