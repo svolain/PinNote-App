@@ -31,6 +31,7 @@ Navigate to frontend directory and compile according to vite config (front- and 
 
 ```
 cd PinNote-App/frontend
+npm i
 npm run build
 ```
 
@@ -57,6 +58,7 @@ Make sure you have postgres installed and running. You have to sign into postgre
 Run server.js and navigate to localhost:5000 in your browser
 
 ```
+npm i
 node server.js
 ```
 
